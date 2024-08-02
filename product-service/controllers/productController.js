@@ -1,42 +1,43 @@
-const Product = require("../models/Product")
-const removeFile = require("../util/removeFile")
+const Product = require('../models/Product')
+const removeFile = require('../util/removeFile')
+const {placeOrder} = require("../util/rabbitMQ")
 
 const getAllProducts = async (req, res) => {
     try {
         const products = await Product.find()
         res.status(200).json(products)
     } catch (err) {
-        res.status(500).json({message: err.message})
+        res.status(500).json({ message: err.message })
     }
 }
 
 const getSingleProduct = async (req, res) => {
     try {
-        let {id} = req.params
+        let { id } = req.params
 
-        if(!id) {
-            return res.status(404).json({message: "No ID Found"})
+        if (!id) {
+            return res.status(404).json({ message: 'No ID Found' })
         }
 
         const product = await Product.findById(id)
 
-        if(!product){
-            return res.status(404).json({message: "No Product Found"})
+        if (!product) {
+            return res.status(404).json({ message: 'No Product Found' })
         }
 
         res.status(200).json(product)
     } catch (err) {
-        res.status(500).json({message: err.message})
+        res.status(500).json({ message: err.message })
     }
 }
 
 const uploadProduct = async (req, res) => {
     try {
-        const {name, description, price, category, stock} = req.body;
+        const { name, description, price, category, stock } = req.body
 
         if (!(req.file && name && price)) {
             removeFile(req.file)
-            return res.status(400).json({message: "Credentials Missing"})
+            return res.status(400).json({ message: 'Credentials Missing' })
         }
         const user = req.data
         const role = user.role
@@ -54,48 +55,69 @@ const uploadProduct = async (req, res) => {
             price: parseInt(price, 10),
             category,
             stock: parseInt(stock, 10),
-            image: fileUrl
+            image: fileUrl,
         })
 
         await product.save()
 
         if (product) {
-            res.status(201).json({message: "Product Uploaded"})
+            res.status(201).json({ message: 'Product Uploaded' })
         }
-
     } catch (err) {
         removeFile(req.file)
-        res.status(500).json({message: err.message})
+        res.status(500).json({ message: err.message })
     }
 }
 
 const deleteProduct = async (req, res) => {
     try {
-        let {id} = req.params
+        let { id } = req.params
 
-        if(!id) {
-            return res.status(404).json({message: "No ID Found"})
+        if (!id) {
+            return res.status(404).json({ message: 'No ID Found' })
         }
 
         const productToDelete = await Product.findById(id)
 
-        if(!productToDelete){
-            return res.status(404).json({message: "No Product Found"})
+        if (!productToDelete) {
+            return res.status(404).json({ message: 'No Product Found' })
         }
 
-        removeFile(productToDelete.image);
+        removeFile(productToDelete.image)
 
-         await Product.findByIdAndDelete(id);
+        await Product.findByIdAndDelete(id)
 
-        res.status(200).json({message: "Successfully Deleted"})
+        res.status(200).json({ message: 'Successfully Deleted' })
     } catch (err) {
         console.log(err)
-        res.status(400).json({message: "Unexpected Server Error"})
+        res.status(500).json({ message: 'Unexpected Server Error' })
     }
 }
 
 const orderProduct = async (req, res) => {
+    try {
+        const { id } = req.params
 
+        const userId = req.data.userId
+        const quantity = req.body.quantity ? req.body.quantity : 1;
+
+        if (!id || !userId) {
+            return res.status(404).json({ message: 'No ID Found' })
+        }
+
+        const product = await Product.findById(id)
+
+        if (!product) {
+            return res.status(404).json({ message: 'No Product Found' })
+        }
+
+        await placeOrder(userId, id, quantity)
+
+        res.status(200).json({ message: 'Ok' })
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({ message: 'Unexpected Server Error' })
+    }
 }
 
 module.exports = {
@@ -103,5 +125,5 @@ module.exports = {
     getSingleProduct,
     uploadProduct,
     orderProduct,
-    deleteProduct
+    deleteProduct,
 }

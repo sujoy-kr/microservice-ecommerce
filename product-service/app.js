@@ -4,6 +4,8 @@ const helmet = require('helmet');
 const cors = require('cors')
 const morgan = require("morgan");
 const connectDB = require("./config/db")
+const {connectMQ} = require("./config/rabbitmq")
+
 
 const env = require('dotenv')
 env.config();
@@ -14,6 +16,7 @@ const app = express()
 const port = process.env.PORT || 3000
 
 connectDB()
+connectMQ()
 
 app.use(helmet());
 app.use(bodyParser.json())
