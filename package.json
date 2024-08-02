@@ -1,12 +1,17 @@
 {
-  "name": "microservice-ecommerce",
+  "name": "microservice-e-commerce",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start:user-service": "cd user-service && npm run dev",
+    "start:product-service": "cd product-service && npm run dev",
+    "all": "concurrently \"npm run start:user-service\" \"npm run start:product-service\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
 }
