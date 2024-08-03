@@ -5,7 +5,8 @@
   "scripts": {
     "start:user-service": "cd user-service && npm run dev",
     "start:product-service": "cd product-service && npm run dev",
-    "all": "concurrently \"npm run start:user-service\" \"npm run start:product-service\""
+    "start:order-service": "cd order-service && npm run dev",
+    "all": "concurrently \"npm run start:user-service\" \"npm run start:product-service\" \"npm run start:order-service\""
   },
   "keywords": [],
   "author": "",

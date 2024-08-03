@@ -1,4 +1,4 @@
-const {getChannel} = require("../config/rabbitmq")
+const { getChannel } = require('../config/rabbitMQ')
 
 const placeOrder = async (userId, productId, quantity) => {
     const channel = await getChannel()
@@ -6,12 +6,12 @@ const placeOrder = async (userId, productId, quantity) => {
         'ORDER',
         Buffer.from(
             JSON.stringify({
-                userId, productId, quantity
+                userId,
+                productId,
+                quantity,
             })
         )
     )
-
-    console.log("Order Placed")
 }
 
-module.exports = {placeOrder}
+module.exports = { placeOrder }

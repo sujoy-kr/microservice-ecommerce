@@ -1,6 +1,6 @@
 const Product = require('../models/Product')
 const removeFile = require('../util/removeFile')
-const {placeOrder} = require("../util/rabbitMQ")
+const { placeOrder } = require('../util/rabbitMQ')
 
 const getAllProducts = async (req, res) => {
     try {
@@ -98,8 +98,16 @@ const orderProduct = async (req, res) => {
     try {
         const { id } = req.params
 
-        const userId = req.data.userId
-        const quantity = req.body.quantity ? req.body.quantity : 1;
+        const userId = parseInt(req.data.userId, 10)
+
+        let quantity = 1
+        if (
+            req.body &&
+            req.body.quantity &&
+            typeof parseInt(req.body.quantity, 10) === 'Int'
+        ) {
+            quantity = parseInt(req.body.quantity, 10)
+        }
 
         if (!id || !userId) {
             return res.status(404).json({ message: 'No ID Found' })
@@ -124,6 +132,6 @@ module.exports = {
     getAllProducts,
     getSingleProduct,
     uploadProduct,
-    orderProduct,
     deleteProduct,
+    orderProduct,
 }

@@ -8,10 +8,10 @@ datasource db {
 }
 
 model Order {
-  id         Int      @id @default(autoincrement())
-  user_id    Int
-  status     String   @default("Pending")
-  quantity   Int      @default(1)
-  product_id Int
-  createdAt  DateTime @default(now())
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  status    String   @default("Pending")
+  quantity  Int      @default(1)
+  productId String
+  createdAt DateTime @default(now())
 }
