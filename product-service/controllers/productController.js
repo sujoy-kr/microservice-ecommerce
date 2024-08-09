@@ -101,11 +101,7 @@ const orderProduct = async (req, res) => {
         const userId = parseInt(req.data.userId, 10)
 
         let quantity = 1
-        if (
-            req.body &&
-            req.body.quantity &&
-            typeof parseInt(req.body.quantity, 10) === 'Int'
-        ) {
+        if (req.body && req.body.quantity) {
             quantity = parseInt(req.body.quantity, 10)
         }
 
@@ -119,7 +115,7 @@ const orderProduct = async (req, res) => {
             return res.status(404).json({ message: 'No Product Found' })
         }
 
-        await placeOrder(userId, id, quantity)
+        await placeOrder(userId, product.name, id, quantity)
 
         res.status(200).json({ message: 'Ok' })
     } catch (err) {

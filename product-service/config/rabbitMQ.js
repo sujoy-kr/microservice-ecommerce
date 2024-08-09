@@ -17,7 +17,7 @@ const connectMQ = async () => {
         })
     } catch (err) {
         console.log('RabbitMQ error:', err)
-        process.exit(0)
+        process.exit(1)
     }
 }
 

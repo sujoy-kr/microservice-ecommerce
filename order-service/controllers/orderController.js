@@ -2,8 +2,11 @@ const prisma = require('../config/db')
 
 const createOrder = async (data) => {
     try {
+        console.log(JSON.parse(data.content).quantity)
+
         const { userId, productId, quantity } = JSON.parse(data.content)
-        const order = await prisma.order.create({
+
+        const result = await prisma.order.create({
             data: {
                 userId,
                 productId,
@@ -11,8 +14,7 @@ const createOrder = async (data) => {
             },
         })
 
-        console.log('new order:', order)
-        return { message: 'New Order Placed' }
+        return result
     } catch (err) {
         console.log(err)
         return { message: 'RabbitMQ Order Service Error' }
