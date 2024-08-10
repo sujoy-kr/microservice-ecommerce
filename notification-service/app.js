@@ -3,15 +3,13 @@ const bodyParser = require('body-parser')
 const helmet = require('helmet')
 const cors = require('cors')
 const morgan = require('morgan')
-const env = require('dotenv')
+require('dotenv').config()
 const { connectMQ } = require('./config/rabbitMQ')
 
 const app = express()
 const port = process.env.PORT || 6000
 
 connectMQ()
-
-env.config()
 app.use(helmet())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))

@@ -117,7 +117,7 @@ const orderProduct = async (req, res) => {
 
         await placeOrder(userId, product.name, id, quantity)
 
-        res.status(200).json({ message: 'Ok' })
+        res.status(200).json({ message: 'Order Placed' })
     } catch (err) {
         console.log(err)
         res.status(500).json({ message: 'Unexpected Server Error' })
