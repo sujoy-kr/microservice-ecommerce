@@ -22,6 +22,7 @@ const indexSingleProduct = async (product) => {
             index: 'products', // Consistent index name
             id: product._id.toString(),
             body: {
+                id: product._id,
                 name: product.name,
                 description: product.description,
                 category: product.category,
