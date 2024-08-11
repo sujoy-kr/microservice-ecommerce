@@ -2,6 +2,13 @@ const Product = require('../models/Product')
 const removeFile = require('../util/removeFile')
 const { placeOrder } = require('../util/rabbitMQ')
 
+const {
+    indexAllIfNotExist,
+    indexSingleProduct,
+    deleteSingleProduct,
+    searchProducts,
+} = require('../util/elasticsearch')
+
 const getAllProducts = async (req, res) => {
     try {
         const products = await Product.find()
@@ -33,21 +40,26 @@ const getSingleProduct = async (req, res) => {
 
 const uploadProduct = async (req, res) => {
     try {
+        console.log('req.data', req.data)
+
         const { name, description, price, category, stock } = req.body
 
         if (!(req.file && name && price)) {
             removeFile(req.file)
             return res.status(400).json({ message: 'Credentials Missing' })
         }
+
         const user = req.data
         const role = user.role
 
         const fileUrl = req.file.path
 
-        // if (role !== "admin") {
-        //     removeFile(req.file)
-        //     return res.status(403).json({message: "No Member Can Upload Products"})
-        // }
+        if (role !== 'admin') {
+            removeFile(req.file)
+            return res
+                .status(403)
+                .json({ message: 'No Member Can Upload Products' })
+        }
 
         const product = await new Product({
             name,
@@ -58,10 +70,16 @@ const uploadProduct = async (req, res) => {
             image: fileUrl,
         })
 
-        await product.save()
+        try {
+            await product.save()
 
-        if (product) {
+            // If product is successfully saved, index it
+            await indexSingleProduct(product)
             res.status(201).json({ message: 'Product Uploaded' })
+        } catch (saveErr) {
+            // If saving fails, remove the file and return an error
+            removeFile(req.file)
+            throw new Error('Error saving product: ' + saveErr.message)
         }
     } catch (err) {
         removeFile(req.file)
@@ -86,6 +104,7 @@ const deleteProduct = async (req, res) => {
         removeFile(productToDelete.image)
 
         await Product.findByIdAndDelete(id)
+        await deleteSingleProduct(id)
 
         res.status(200).json({ message: 'Successfully Deleted' })
     } catch (err) {
@@ -124,10 +143,24 @@ const orderProduct = async (req, res) => {
     }
 }
 
+const getSearchResults = async (req, res) => {
+    try {
+        const keyword = req.params.keyword
+
+        await indexAllIfNotExist()
+        const products = await searchProducts(keyword)
+        res.status(200).json({ products })
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({ message: 'Unexpected Server Error' })
+    }
+}
+
 module.exports = {
     getAllProducts,
     getSingleProduct,
     uploadProduct,
     deleteProduct,
     orderProduct,
+    getSearchResults,
 }

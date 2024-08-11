@@ -105,7 +105,7 @@ const login = async (req, res) => {
                 const checkPass = await bcrypt.compare(password, user.password)
                 if (checkPass) {
                     const token = jwt.sign(
-                        { userId: user.id },
+                        { userId: user.id, role: user.role },
                         process.env.JWT_SECRET
                     )
 
