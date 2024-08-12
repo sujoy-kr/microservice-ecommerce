@@ -7,7 +7,8 @@
     "start:product-service": "cd product-service && npm run dev",
     "start:order-service": "cd order-service && npm run dev",
     "start:notification-service": "cd notification-service && npm run dev",
-    "all": "concurrently \"npm run start:user-service\" \"npm run start:product-service\" \"npm run start:order-service\" \"npm run start:notification-service\""
+    "start:cart-service": "cd cart-service && npm run dev",
+    "all": "concurrently \"npm run start:user-service\" \"npm run start:product-service\" \"npm run start:order-service\" \"npm run start:notification-service\" \"npm run start:cart-service\""
   },
   "keywords": [],
   "author": "",
