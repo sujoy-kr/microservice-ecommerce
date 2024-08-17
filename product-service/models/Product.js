@@ -25,6 +25,11 @@ const productSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        times_ordered: {
+            type: Number,
+            required: true,
+            default: 0,
+        },
     },
     {
         timestamps: true,
@@ -35,7 +40,10 @@ productSchema.set('toJSON', {
     virtuals: true,
     versionKey: false,
     transform: function (doc, ret) {
-        delete ret._id, delete ret.stock, delete ret.updatedAt
+        delete ret._id,
+            delete ret.stock,
+            delete ret.updatedAt,
+            delete order_count
     },
 })
 
