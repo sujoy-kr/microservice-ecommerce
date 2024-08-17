@@ -18,7 +18,12 @@ const connectMQ = async () => {
 
             channel.sendToQueue(
                 'PRODUCT',
-                Buffer.from(JSON.stringify({ message: 'New Order Placed' }))
+                Buffer.from(
+                    JSON.stringify({
+                        message: 'New Order Placed',
+                        productId: result.productId,
+                    })
+                )
             )
 
             channel.sendToQueue(
