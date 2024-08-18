@@ -4,17 +4,19 @@ const helmet = require('helmet')
 const cors = require('cors')
 const morgan = require('morgan')
 const env = require('dotenv')
-const {connectMQ} = require("./config/rabbitMQ")
+const { redisClient } = require('./config/redis')
+const { connectMQ } = require('./config/rabbitMQ')
 
 // routes
 const orderRoutes = require('./routes/orderRoutes')
 
+redisClient.connect()
+connectMQ()
+env.config()
+
 const app = express()
 const port = process.env.PORT || 5000
 
-connectMQ()
-
-env.config()
 app.use(helmet())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))

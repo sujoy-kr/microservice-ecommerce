@@ -134,6 +134,12 @@ const orderProduct = async (req, res) => {
             return res.status(404).json({ message: 'No Product Found' })
         }
 
+        if (product.stock <= 0 || product.stock < quantity) {
+            return res.status(404).json({
+                message: 'Product Out Of Stock or less than Required Quantity',
+            })
+        }
+
         await placeOrder(userId, product.name, id, quantity)
 
         res.status(200).json({ message: 'Order Placed' })

@@ -20,6 +20,7 @@ const connectMQ = async () => {
                 let product = await Product.findById(response.productId)
                 if (product) {
                     product.times_ordered += 1
+                    product.stock -= parseInt(response.quantity)
                     product.save()
                     console.log('product updated')
                 }

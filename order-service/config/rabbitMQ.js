@@ -22,6 +22,7 @@ const connectMQ = async () => {
                     JSON.stringify({
                         message: 'New Order Placed',
                         productId: result.productId,
+                        quantity: result.quantity,
                     })
                 )
             )

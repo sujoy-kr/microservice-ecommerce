@@ -6,7 +6,7 @@ redisClient.on('error', (err) => {
 })
 
 redisClient.on('connect', () => {
-    console.log('Connected to Redis - Cart Service')
+    console.log('Connected to Redis - Order Service')
 })
 
 module.exports = { redisClient }
