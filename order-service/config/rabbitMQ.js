@@ -1,5 +1,5 @@
 const amqp = require('amqplib')
-const { createOrder } = require('../controllers/orderController')
+const { createOrder } = require('../util/order')
 
 let channel
 const connectMQ = async () => {
@@ -45,4 +45,11 @@ const connectMQ = async () => {
     }
 }
 
-module.exports = { connectMQ }
+const getChannel = async () => {
+    if (!channel) {
+        await connectMQ()
+    }
+    return channel
+}
+
+module.exports = { connectMQ, getChannel }

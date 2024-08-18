@@ -21,6 +21,7 @@ const sendEmail = async (to, message) => {
     try {
         await transporter.sendMail(mailOptions)
         console.log('email sent to ', to)
+        console.log('email:', message)
     } catch (err) {
         console.log('nodemailer error', err)
     }

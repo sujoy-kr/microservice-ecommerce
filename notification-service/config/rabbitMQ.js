@@ -1,3 +1,4 @@
+const { redisClient } = require('../config/redis')
 const amqp = require('amqplib')
 const { sendEmail } = require('../util/mailService')
 
@@ -14,7 +15,12 @@ const connectMQ = async () => {
             console.log('Consuming orders to NOTIFY')
 
             const message = JSON.parse(data.content.toString())
-            console.log(message)
+            console.log('messagetosend', message.messageToSend)
+
+            await redisClient.set(
+                message.userId.toString(),
+                message.messageToSend
+            )
 
             channel.sendToQueue(
                 'USER',
@@ -25,23 +31,30 @@ const connectMQ = async () => {
                 )
             )
 
-            await channel.consume('USERINFO', async (userinfo) => {
-                console.log('Consuming user info')
-
-                const returnedData = JSON.parse(userinfo.content.toString())
-                console.log(returnedData)
-
-                if (message.userId === returnedData.id) {
-                    const messageToSend =
-                        `Hello ${returnedData.name},\n` + message.messageToSend
-
-                    await sendEmail(returnedData.email, messageToSend)
-                }
-
-                channel.ack(userinfo)
-            })
-
             channel.ack(data)
+        })
+
+        await channel.consume('USERINFO', async (userinfo) => {
+            console.log('Consuming user info')
+
+            const returnedData = JSON.parse(userinfo.content.toString())
+            console.log(returnedData)
+
+            const message = await redisClient.get(returnedData.id.toString())
+
+            if (message) {
+                const messageToSend = `Hello ${returnedData.name},\n` + message
+
+                await sendEmail(returnedData.email, messageToSend)
+
+                await redisClient.del(returnedData.id.toString())
+            } else {
+                console.log(
+                    `No corresponding NOTIFY message found for userId ${returnedData.id}`
+                )
+            }
+
+            channel.ack(userinfo)
         })
     } catch (err) {
         console.log('RabbitMQ error:', err)

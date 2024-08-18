@@ -1,26 +1,6 @@
 const prisma = require('../config/db')
 const { redisClient } = require('../config/redis')
-
-const createOrder = async (data) => {
-    try {
-        console.log(JSON.parse(data.content).quantity)
-
-        const { userId, productId, quantity } = JSON.parse(data.content)
-
-        const result = await prisma.order.create({
-            data: {
-                userId,
-                productId,
-                quantity,
-            },
-        })
-
-        return result
-    } catch (err) {
-        console.log(err)
-        return { message: 'RabbitMQ Order Service Error' }
-    }
-}
+const { notifyUser } = require('../util/rabbitMQ')
 
 const getAllOrders = async (req, res) => {
     try {
@@ -141,6 +121,11 @@ const updateOrder = async (req, res) => {
             return res.status(404).json({ message: 'error' })
         }
 
+        notifyUser(
+            order.userId,
+            `Your order has been ${status}. Thank you for shopping with us!`
+        )
+
         res.status(201).json({ order })
     } catch (err) {
         console.log(err)
@@ -148,4 +133,4 @@ const updateOrder = async (req, res) => {
     }
 }
 
-module.exports = { createOrder, getAllOrders, updateOrder }
+module.exports = { getAllOrders, updateOrder }
