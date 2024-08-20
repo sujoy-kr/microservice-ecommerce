@@ -112,9 +112,9 @@ AMQP_SERVER=amqp://localhost
     -   **Request Body**:
         ```json
         {
-            "name": "string", // Required
-            "email": "string", // Required
-            "password": "string" // Required
+            "name": "string",
+            "email": "string",
+            "password": "string"
         }
         ```
 
@@ -122,8 +122,8 @@ AMQP_SERVER=amqp://localhost
     -   **Request Body**:
         ```json
         {
-            "email": "string", // Required
-            "password": "string" // Required
+            "email": "string",
+            "password": "string"
         }
         ```
 -   `GET /api/user/profile`: Return user profile data based on JWT.
@@ -153,21 +153,21 @@ ELASTICSEARCH_PASSWORD=sujoykr
     -   **Request Body**:
         ```json
         {
-            "name": "string", // Required
-            "description": "string", // Optional
-            "price": "number", // Required
-            "category": "string", // Required
-            "stock": "number", // Required
-            "image": "file" // Required
+            "name": "string",
+            "description": "string",
+            "price": "number",
+            "category": "string",
+            "stock": "number",
+            "image": "file"
         }
         ```
 -   `GET /api/product/:id`: Get single product by ID.
 -   `DELETE /api/product/:id`: Delete a product by ID.
 -   `POST /api/product/:id/order`: Order a product.
-    -   **Request Body**:
+    -   **Request Body**: Optional. Default quantity is 1
         ```json
         {
-            "quantity": "number" // Optional. Default is 1
+            "quantity": "number"
         }
         ```
 -   `GET /api/product/search/:keyword`: Search products by keywords.
@@ -193,7 +193,7 @@ JWT_SECRET=sujoykr
     -   **Request Body**:
         ```json
         {
-            "status": "string" // Required, e.g., "packaged", "delivered", "shipped"
+            "status": "string"
         }
         ```
 
@@ -215,8 +215,8 @@ JWT_SECRET=sujoykr
     -   **Request Body**:
         ```json
         {
-            "productId": "string", // Required
-            "quantity": "number" // Required
+            "productId": "string",
+            "quantity": "number"
         }
         ```
 -   `POST /api/cart/`: Adds items to user cart data in cache based on JWT (expires in 1 hour).
@@ -224,7 +224,7 @@ JWT_SECRET=sujoykr
     -   **Request Body**:
         ```json
         {
-            "productId": "string" // Required
+            "productId": "string"
         }
         ```
 
