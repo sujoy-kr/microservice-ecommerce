@@ -67,14 +67,14 @@ This project is divided into multiple microservices, each with its own repositor
 
 1. Clone the repository:
 
-    ```bash
+    ```sh
     git clone https://github.com/sujoy-kr/microservice-ecommerce.git
     cd microservice-ecommerce
     ```
 
 2. Install dependencies for each service:
 
-    ```bash
+    ```shell
     cd services/user-service
     npm install
     ```
@@ -83,7 +83,7 @@ This project is divided into multiple microservices, each with its own repositor
 
 4. Set up environment variables for each service. Example for User Service:
 
-    ```bash
+    ```console
     cp .env.example .env
     ```
 
