@@ -112,9 +112,9 @@ AMQP_SERVER=amqp://localhost
     -   **Request Body**:
         ```json
         {
-            "name": "Sujoy Karmakar",
-            "email": "demo@gmail.com",
-            "password": "helloWorld"
+            "name": "string", // Required
+            "email": "string", // Required
+            "password": "string" // Required
         }
         ```
 
@@ -122,8 +122,8 @@ AMQP_SERVER=amqp://localhost
     -   **Request Body**:
         ```json
         {
-            "email": "demo@gmail.com",
-            "password": "helloWorld"
+            "email": "string", // Required
+            "password": "string" // Required
         }
         ```
 -   `GET /api/user/profile`: Return user profile data based on JWT.
