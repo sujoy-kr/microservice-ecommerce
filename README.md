@@ -108,7 +108,24 @@ AMQP_SERVER=amqp://localhost
 **Routes**:
 
 -   `POST /api/user/register`: Register a new user.
+
+    -   **Request Body**:
+        ```json
+        {
+            "name": "Sujoy Karmakar",
+            "email": "demo@gmail.com",
+            "password": "helloWorld"
+        }
+        ```
+
 -   `POST /api/user/login`: Authenticate user and return a JWT.
+    -   **Request Body**:
+        ```json
+        {
+            "email": "demo@gmail.com",
+            "password": "helloWorld"
+        }
+        ```
 -   `GET /api/user/profile`: Return user profile data based on JWT.
 -   `DELETE /api/user/delete`: Delete user data based on JWT.
 
@@ -133,9 +150,26 @@ ELASTICSEARCH_PASSWORD=sujoykr
 
 -   `GET /api/product/`: Get all products.
 -   `POST /api/product/`: Create a new product.
+    -   **Request Body**:
+        ```json
+        {
+            "name": "string", // Required
+            "description": "string", // Optional
+            "price": "number", // Required
+            "category": "string", // Required
+            "stock": "number", // Required
+            "image": "file" // Required
+        }
+        ```
 -   `GET /api/product/:id`: Get single product by ID.
 -   `DELETE /api/product/:id`: Delete a product by ID.
 -   `POST /api/product/:id/order`: Order a product.
+    -   **Request Body**:
+        ```json
+        {
+            "quantity": "number" // Optional. Default is 1
+        }
+        ```
 -   `GET /api/product/search/:keyword`: Search products by keywords.
 
 <br/>
@@ -156,6 +190,12 @@ JWT_SECRET=sujoykr
 
 -   `GET /api/order/`: Get all pending orders (real-time updates via SSE).
 -   `PUT /api/order/:id`: Update order status (e.g., packaged, delivered, shipped).
+    -   **Request Body**:
+        ```json
+        {
+            "status": "string" // Required, e.g., "packaged", "delivered", "shipped"
+        }
+        ```
 
 <br/>
 
@@ -172,8 +212,21 @@ JWT_SECRET=sujoykr
 **Routes**:
 
 -   `GET /api/cart/`: Get user cart data based on JWT.
--   `POST /api/cart/`: Save or update user cart data in cache based on JWT (expires in 1 hour).
--   `DELETE /api/cart/`: Delete user cart data from cache based on JWT.
+    -   **Request Body**:
+        ```json
+        {
+            "productId": "string", // Required, ID of the product
+            "quantity": "number" // Required, quantity of the product
+        }
+        ```
+-   `POST /api/cart/`: Adds items to user cart data in cache based on JWT (expires in 1 hour).
+-   `DELETE /api/cart/`: Delete items from user cart data from cache based on JWT.
+    -   **Request Body**:
+        ```json
+        {
+            "productId": "string"
+        }
+        ```
 
 ### Notification Service
 
