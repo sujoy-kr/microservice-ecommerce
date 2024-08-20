@@ -215,8 +215,8 @@ JWT_SECRET=sujoykr
     -   **Request Body**:
         ```json
         {
-            "productId": "string", // Required, ID of the product
-            "quantity": "number" // Required, quantity of the product
+            "productId": "string", // Required
+            "quantity": "number" // Required
         }
         ```
 -   `POST /api/cart/`: Adds items to user cart data in cache based on JWT (expires in 1 hour).
@@ -224,7 +224,7 @@ JWT_SECRET=sujoykr
     -   **Request Body**:
         ```json
         {
-            "productId": "string"
+            "productId": "string" // Required
         }
         ```
 
