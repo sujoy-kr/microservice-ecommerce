@@ -228,6 +228,8 @@ JWT_SECRET=sujoykr
         }
         ```
 
+<br/>
+
 ### Notification Service
 
 **Tech Stack**: Node.js, Express, Nodemailer, RabbitMQ, Redis
